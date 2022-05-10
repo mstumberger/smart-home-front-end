@@ -10,10 +10,11 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import {AppDispatch} from "../../app/store";
 
 export function Counter() {
   const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 
   const incrementValue = Number(incrementAmount) || 0;
@@ -50,18 +51,18 @@ export function Counter() {
         >
           Add Amount
         </button>
-        <button
+{/*        <button
           className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
+          onClick={async () => dispatch(incrementAsync(incrementValue))}
         >
           Add Async
         </button>
         <button
           className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
+          onClick={async () => dispatch(incrementIfOdd(incrementValue))}
         >
           Add If Odd
-        </button>
+        </button>*/}
       </div>
     </div>
   );

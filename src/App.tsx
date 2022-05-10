@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
+import 'react-bootstrap-toggle/dist/bootstrap2-toggle.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import WsConnection from "./features/websocket/WsConnection";
+import ClientsList from "./features/clients/ClientsList";
 
 function App() {
   return (
     <div className="App">
+      <WsConnection />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
@@ -50,6 +55,7 @@ function App() {
             React Redux
           </a>
         </span>
+        <ClientsList backgroundColor={"blue"} />
       </header>
     </div>
   );
