@@ -1,9 +1,9 @@
-import {Col, Container, Row, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import React, {useState} from "react";
 
-import ToggleButton from "../../ToggleButton";
+import ToggleButton from "../../../../../ToggleButton";
 import {ActionCreatorsMapObject} from "redux";
-import {DeviceSettings, PinSetting} from "../../SmartHomeClient";
+import {DeviceSettings} from "../../../index";
 
 const name: string = "8-channel-relay";
 
@@ -12,15 +12,20 @@ interface Relay8ChannelProps {
     settings: any
 }
 
-interface RelayStatus {
-    channels: Map<string, PinStatus>
-}
 interface PinStatus {
     status: boolean;
     timeChanged: Date | null;
 }
 
 function Relay8Channel(props: Relay8ChannelProps) {
+    const relay8ChannelSettings: DeviceSettings = props.settings.pinConfig.gpio.filter((sensor: { type: string; }) => sensor.type == name)[0]
+    let pinStatuses: PinStatus[]  = Object.values(relay8ChannelSettings.pins).map((key) => { return {
+        status: false,
+        timeChanged: null
+    } as PinStatus});
+
+
+    const [relayStatus, setStatus] = useState(pinStatuses);
 
     function setPinValue(index: number, value: any) {
         let pinStatus: PinStatus = relayStatus[index];
@@ -36,20 +41,9 @@ function Relay8Channel(props: Relay8ChannelProps) {
     const handleToggle = (index: number, pin: number, value: any) => {
         const newValue: boolean = !value;
         setPinValue(index, newValue);
-        console.log(value, "=>", newValue)
-        console.log(pin, newValue)
+        console.log("channel", index+1, value, "=>", newValue)
         props.actions.call('com.smart.home.relay.toggle', [pin, newValue]);
     }
-
-    const relay8ChannelSettings: DeviceSettings = props.settings.pinConfig.gpio.filter((sensor: { type: string; }) => sensor.type == name)[0]
-    let pinStatuses: PinStatus[]  = Object.values(relay8ChannelSettings.pins).map((key) => { return {
-        status: false,
-        timeChanged: null
-    } as PinStatus});
-/*    Object.values(relay8ChannelSettings.pins).forEach((key) => pinStatuses.set(key, {
-        status: false,
-        timeChanged: null
-    }))*/
 
     function formatTimestamp(d: Date | null) {
         if (d == null) {
@@ -58,11 +52,9 @@ function Relay8Channel(props: Relay8ChannelProps) {
         const pad = (n: number,s=2) => (`${new Array(s).fill(0)}${n}`).slice(-s);
         return `${pad(d.getFullYear(),4)}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     }
-    const [relayStatus, setStatus] = useState(pinStatuses);
-    console.log(relayStatus)
-
     // @ts-ignore
-    return (
+    return (<>
+        - relay 8 channel<br />
         <Table striped bordered hover variant="dark">
             <thead>
             <tr>
@@ -72,7 +64,7 @@ function Relay8Channel(props: Relay8ChannelProps) {
                 <th>Channel Name</th>
                 <th>Time Changed</th>
                 <th>GPIO Pin</th>
-                {/*<th>Schedule</th>*/}
+                <th>Schedule</th>
             </tr>
             </thead>
             <tbody>
@@ -84,23 +76,20 @@ function Relay8Channel(props: Relay8ChannelProps) {
                         <ToggleButton
                             id={number}
                             isOn={pinStatus?.status}
-                            handleToggle={() => {
-                                console.log(pinStatus?.status);
-                                handleToggle(number, key.pin, pinStatus?.status)
-
-                            }}
+                            handleToggle={() => { handleToggle(number, key.pin, pinStatus?.status) }}
                         />
                     </td>
                     <td>{ pinStatus?.status ? "ON" : "OFF"}</td>
                     <td>{ key.name }</td>
                     <td>{ formatTimestamp(pinStatus?.timeChanged)}</td>
                     <td>{key.pin}</td>
-                    {/*<td>Add</td>*/}
+                    <td>Add</td>
                 </tr>
                 }
             )}
             </tbody>
         </Table>
+    </>
     )
 }
 

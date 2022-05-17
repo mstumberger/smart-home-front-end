@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import reduxAutobahn from 'redux-autobahn-js';
 import { Connection } from 'autobahn';
 import { store } from '../../app/store';
-import {
-    setAmount,
-} from '../counter/counterSlice';
 
 const isConnected = props => props.autobahnConnection.connection.isConnected;
 const isSubscribed = (props, topic) =>
@@ -14,7 +11,6 @@ const isSubscribed = (props, topic) =>
     0;
 
 class App extends Component {
-    componentDidMount() {}
 
     componentWillReceiveProps(newProps) {
         if (this.isNewConnection(newProps)) {
@@ -78,19 +74,19 @@ class App extends Component {
                 <h2>Redux autobahn test</h2>
                 <h3>{this.props.message}</h3>
                 <div>
-                    <button onClick={e => this.connect()}>Connect</button>
+                    <button onClick={() => this.connect()}>Connect</button>
                 </div>
                 <div>
                     <button
                         disabled={!this.props.connected || !this.props.subscription}
-                        onClick={e => this.publishToSubscription()}
+                        onClick={() => this.publishToSubscription()}
                     >
                         Publish to Subscription
                     </button>
                     <br />
                     <button
                         disabled={!this.props.connected || !this.props.subscription}
-                        onClick={e => this.unsubscribe()}
+                        onClick={() => this.unsubscribe()}
                     >
                         Unsubscribe
                     </button>
@@ -98,7 +94,7 @@ class App extends Component {
                 <div>
                     <button
                         disabled={!this.props.connected}
-                        onClick={e => this.registerMethod()}
+                        onClick={() => this.registerMethod()}
                     >
                         Register RPC method
                     </button>
@@ -106,10 +102,17 @@ class App extends Component {
                 <div>
                     <button
                         disabled={!this.props.connected || !this.props.method}
-                        onClick={e => this.rpcCall()}
+                        onClick={() => this.rpcCall()}
                     >
                         RPC call
                     </button>
+                </div>
+
+                <div>
+                    <button onClick={() => this.rpcCall()}>call</button>
+                </div>
+                <div>
+                 <button onClick={() => this.publishToSubscription()}>publish</button>
                 </div>
             </div>
         );

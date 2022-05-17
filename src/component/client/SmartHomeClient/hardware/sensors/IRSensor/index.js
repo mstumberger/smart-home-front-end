@@ -4,7 +4,8 @@ export default (props) => {
     return (
         <>
             <div>
-                pin, status - triggered
+                - IR sensor<br />
+                pin, status - triggered<br />
             </div>
         </>
     )

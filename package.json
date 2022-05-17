@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cutting/svg": "^4.45.3",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
@@ -16,8 +17,10 @@
     "react": "^18.1.0",
     "react-bootstrap": "^2.3.1",
     "react-bootstrap-toggle": "^2.3.2",
+    "react-burger-menu": "^3.0.6",
     "react-dom": "^18.1.0",
     "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "redux-autobahn-js": "github:brycedarling/redux-autobahn-js",
     "typescript": "^4.6.4",
