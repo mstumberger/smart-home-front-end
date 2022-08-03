@@ -14,6 +14,7 @@ import { Connection } from 'autobahn';
 import reduxAutobahn from 'redux-autobahn-js';
 import counterReducer from '../features/counter/counterSlice';
 import WsReducer from "../features/websocket/WsReducer";
+import ClientsReducer from "../features/clients/ClientsReducer";
 
 const connection = new Connection({
   url: 'ws://localhost:8080/ws',
@@ -24,6 +25,7 @@ connection.onopen = (session: any, details: any) => {
   console.log('conn opened', session, details);
 };
 
+// @ts-ignore
 connection.onclose = (session: any, details: any) => {
   console.log('conn closed', session, details);
 };
@@ -50,6 +52,7 @@ const rootReducer = combineReducers({
   autobahnConnection: reduxAutobahn.reducer,
   counter: counterReducer,
   websocketReducer: WsReducer,
+  clientsReducer: ClientsReducer,
 })
 
 export const store = createStore(rootReducer, initialState, composedEnhancers);

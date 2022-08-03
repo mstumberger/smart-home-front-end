@@ -1,12 +1,9 @@
 
 const initialState = {
-    connected: false,
-    method: false,
-    subscription: false,
-    message: ''
+    clients: {}
 };
 
-const reducer = (state = initialState, action: any) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'autobahn/CONNECTION_OPENED':
             return {
@@ -43,12 +40,15 @@ const reducer = (state = initialState, action: any) => {
             };
 
         case 'autobahn/RESULT':
-            return {
-                ...state,
-                message: `Published ${action.args} to WAMP method, received ${
-                    JSON.stringify(action.results)
-                }`
-            };
+            switch (action.procedure) {
+                case 'online_clients':
+                    return {
+                        ...state,
+                        clients: action.results
+                    };
+                default:
+                    return state;
+            }
 
         case 'autobahn/EVENT':
             return {

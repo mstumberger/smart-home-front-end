@@ -3,7 +3,7 @@ import React, {useState} from "react";
 
 import ToggleButton from "../../../../../ToggleButton";
 import {ActionCreatorsMapObject} from "redux";
-import {DeviceSettings} from "../../../index";
+import {DeviceSettings} from "../../../../../client/SmartHomeClient";
 
 const name: string = "8-channel-relay";
 
@@ -54,7 +54,7 @@ function Relay8Channel(props: Relay8ChannelProps) {
     }
     // @ts-ignore
     return (<>
-        <h2>{props.settings.name}</h2><br />
+        - relay 8 channel<br />
         <Table striped bordered hover variant="dark">
             <thead>
             <tr>

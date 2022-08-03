@@ -10,17 +10,24 @@ const isSubscribed = (props, topic) =>
     props.autobahnConnection.subscriptions.filter(s => s.topic === topic).length >
     0;
 
+export const url = `${document.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${document.location.host.split(':')[0]}:8080/ws`;
+
 class App extends Component {
+
+    componentWillMount() {
+        this.connect()
+    }
 
     componentWillReceiveProps(newProps) {
         if (this.isNewConnection(newProps)) {
             function onevent(args) {
                 console.log(args);
             }
-            this.props.actions.subscribe('example.oncounter', onevent);
+            this.props.actions.subscribe('services_status', onevent);
+            this.rpcCall()
         }
-        if (this.isNewSubscription(newProps, 'example.oncounter')) {
-            console.log('new subscription to:', 'example.oncounter');
+        if (this.isNewSubscription(newProps, 'services_status')) {
+            console.log('new subscription to:', 'services_status');
         }
     }
 
@@ -43,7 +50,7 @@ class App extends Component {
     connect = () => {
         store.setAutobahnConnection(
             new Connection({
-                url: `ws://localhost:8080/ws`,
+                url,
                 realm: 'realm1'
             })
         );
@@ -64,15 +71,20 @@ class App extends Component {
         this.props.actions.register('com.example.test.testCall', add2);
     };
 
-    rpcCall = () => {
+    rpcCall2 = () => {
         this.props.actions.call('com.example.test.testCall', [1, 1]);
     };
 
+    rpcCall = () => {
+        this.props.actions.call('online_clients', []);
+    };
+
     render() {
+        console.log(this.props.message)
         return (
             <div className="App">
                 <h2>Redux autobahn test</h2>
-                <h3>{this.props.message}</h3>
+                <h3>{JSON.stringify(this.props.message)}</h3>
                 <div>
                     <button onClick={() => this.connect()}>Connect</button>
                 </div>
