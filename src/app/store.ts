@@ -17,7 +17,7 @@ import WsReducer from "../features/websocket/WsReducer";
 import ClientsReducer from "../features/clients/ClientsReducer";
 
 const connection = new Connection({
-  url: 'ws://localhost:8080/ws',
+  url: 'ws://localhost:8082/ws',
   realm: 'realm1',
 });
 

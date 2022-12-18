@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Routes, Route } from "react-router-dom";
 import './App.css';
 import 'react-bootstrap-toggle/dist/bootstrap2-toggle.css';
@@ -7,15 +7,34 @@ import ClientsList from "./features/clients/ClientsList";
 import ClientsConfiguration from "./component/configuration/";
 import SideBar from "./features/SideBar"
 import {Container} from "react-bootstrap";
+import Relay8Channel from "./component/client/SmartHomeClient/hardware/sensors/Relay";
+import {AppDispatch, RootState} from "./app/store";
+import bindActionCreators from "react-redux/es/utils/bindActionCreators";
+import reduxAutobahn from "redux-autobahn-js";
+import {connect, ConnectedProps} from "react-redux";
+import {ClientSettings, DeviceSettings} from "./component/client/SmartHomeClient";
+import axios from "axios";
+import SmartHomeClient from "./component/configuration/client";
 
-function App() {
+interface Props extends PropsFromRedux {}
+
+function App(props: Props) {
+    const defaultPosts:DeviceSettings[] = [];
+    const [data, setData] = useState(defaultPosts);
+
+    useEffect(() => {
+        axios
+            .get("api/modules-detail/")
+            .then(result => setData(result.data));
+    }, []);
+    // @ts-ignore
   return (
     <div className="App">
       <SideBar />
       <header className="App-header">
 
       </header>
-        {/*<Container>*/}
+        <Container  className="App-Container">
             <Routes>
                 <Route path="/" element={
                     <div>
@@ -36,6 +55,8 @@ function App() {
                             <ClientsList backgroundColor={"blue"} />
                             <div className={"Living room"}>
                                 sensors lists, readings, toggles, + remove from dashboard
+                                {data.map(item => <Relay8Channel actions={props.actions} settings={item} />)}
+
                             </div>
                             <div className={"Bed room"}>
 
@@ -61,9 +82,26 @@ function App() {
                 <Route path="logIn" element={<div />} />
                 <Route path="logOut" element={<div />} />
             </Routes>
-        {/*</Container>*/}
+        </Container>
     </div>
   );
 }
 
-export default App;
+
+const mapDispatch = (dispatch: AppDispatch) => ({
+    actions: bindActionCreators(reduxAutobahn.actions, dispatch),
+    dispatch: dispatch
+});
+
+// @ts-ignore
+const mapState = (state: RootState) => ({
+    autobahn: state.autobahnConnection,
+    websocket: state.websocketReducer,
+    clients: state.clientsReducer?.clients,
+})
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+export default connector(App)

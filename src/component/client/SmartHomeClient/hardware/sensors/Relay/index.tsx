@@ -3,13 +3,13 @@ import React, {useState} from "react";
 
 import ToggleButton from "../../../../../ToggleButton";
 import {ActionCreatorsMapObject} from "redux";
-import {DeviceSettings} from "../../../index";
+import {ClientSettings, DeviceSettings, PinSetting} from "../../../index";
 
 const name: string = "8-channel-relay";
 
 interface Relay8ChannelProps {
     actions: ActionCreatorsMapObject
-    settings: any
+    settings: DeviceSettings
 }
 
 interface PinStatus {
@@ -18,8 +18,8 @@ interface PinStatus {
 }
 
 function Relay8Channel(props: Relay8ChannelProps) {
-    const relay8ChannelSettings: DeviceSettings = props.settings.pinConfig.gpio.filter((sensor: { type: string; }) => sensor.type == name)[0]
-    let pinStatuses: PinStatus[]  = Object.values(relay8ChannelSettings.pins).map((key) => { return {
+    const relay8ChannelSettings: PinSetting[] = props.settings.used_pins;//.filter((sensor: { type: string; }) => sensor.type == name)
+    let pinStatuses: PinStatus[]  = Object.values(relay8ChannelSettings).map((key) => { return {
         status: false,
         timeChanged: null
     } as PinStatus});
@@ -42,7 +42,8 @@ function Relay8Channel(props: Relay8ChannelProps) {
         const newValue: boolean = !value;
         setPinValue(index, newValue);
         console.log("channel", index+1, value, "=>", newValue)
-        props.actions.call(`relay.${props.settings.ip}.toggle`, [pin, newValue]);
+        console.log(`relay.${props.settings.client?.ip}.toggle`, [pin, newValue])
+        props.actions.call(`relay.${props.settings.client?.ip}.toggle`, [pin, newValue]);
     }
 
     function formatTimestamp(d: Date | null) {
@@ -52,7 +53,8 @@ function Relay8Channel(props: Relay8ChannelProps) {
         const pad = (n: number,s=2) => (`${new Array(s).fill(0)}${n}`).slice(-s);
         return `${pad(d.getFullYear(),4)}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     }
-    // @ts-ignore
+
+    // console.log(props.settings)
     return (<>
         <h2>{props.settings.name}</h2><br />
         <Table striped bordered hover variant="dark">
@@ -68,7 +70,7 @@ function Relay8Channel(props: Relay8ChannelProps) {
             </tr>
             </thead>
             <tbody>
-            { Object.values(relay8ChannelSettings.pins).map((key, number) => {
+            { Object.values(relay8ChannelSettings).map((key, number) => {
                 const pinStatus: PinStatus = relayStatus[number];
                 return <tr key={`pin_${key}_${number}`}>
                     <td>{number + 1}</td>
@@ -80,7 +82,7 @@ function Relay8Channel(props: Relay8ChannelProps) {
                         />
                     </td>
                     <td>{ pinStatus?.status ? "ON" : "OFF"}</td>
-                    <td>{ key.name }</td>
+                    <td>{ key.id }</td>
                     <td>{ formatTimestamp(pinStatus?.timeChanged)}</td>
                     <td>{key.pin}</td>
                     <td>Add</td>

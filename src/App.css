@@ -21,6 +21,13 @@
   font-size: calc(10px + 2vmin);
 }
 
+.App-Container {
+  /*margin-top: 73px;*/
+  /*margin-bottom: 73px;*/
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
 .App-link {
   color: rgb(112, 76, 182);
 }

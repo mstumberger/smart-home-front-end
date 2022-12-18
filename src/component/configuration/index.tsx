@@ -6,6 +6,7 @@ import bindActionCreators from "react-redux/es/utils/bindActionCreators";
 import reduxAutobahn from 'redux-autobahn-js';
 import {ClientSettings} from '../client/SmartHomeClient';
 import SmartHomeClient from './client'
+import { Container } from "react-bootstrap";
 
 
 interface Props extends PropsFromRedux {
@@ -18,14 +19,14 @@ const ClientList = (props: Props) => {
 
     useEffect(() => {
         axios
-            .get("clients/")
+            .get("api/clients/")
             .then(result => setData(result.data));
     }, []);
     // @ts-ignore
     return <>
-        <div>
+        <Container key={`Client_Container`}>
             {data.map(item => <SmartHomeClient actions={props.actions} settings={item} />)}
-        </div>
+        </Container>
     </>
 }
 

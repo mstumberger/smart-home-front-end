@@ -10,7 +10,7 @@ const isSubscribed = (props, topic) =>
     props.autobahnConnection.subscriptions.filter(s => s.topic === topic).length >
     0;
 
-export const url = `${document.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${document.location.host.split(':')[0]}:8080/ws`;
+export const url = `${document.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${document.location.host.split(':')[0]}:8082/ws`;
 
 class App extends Component {
 

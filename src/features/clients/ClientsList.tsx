@@ -23,43 +23,56 @@ const ClientList = (props: Props) => {
                 ip: props.clients.services[client].ip,
                 boardType: "Raspberry Pi 2B",
                 enabledSensors: [ "8-channel-relay", "temp-dallas", "ir-sensor", "single-relay" ],
-                usedPins: [2, 3, 4, 17, 27, 22, 10, 9],
-                pinConfig: {
-                    gpio: [
-                        {
-                            id: -4,
-                            type: "8-channel-relay",
-                            pins: {
-                                1: {name: "Switch 1", pin: 2},
-                                2: {name: "Switch 2", pin: 3},
-                                3: {name: "Switch 3", pin: 4},
-                                4: {name: "Switch 4", pin: 17},
-                                5: {name: "Luč", pin: 27},
-                                6: {name: "Switch 6", pin: 22},
-                                7: {name: "Switch 7", pin: 10},
-                                8: {name: "Switch 8", pin: 9}
-                            }
-                        }, {
-                            id: -2,
-                            type: "temp-dallas",
-                            pins: {
-                                1: {name: "kitchen window", pin: 8}
-                            }
-                        }, {
-                            id: -5,
-                            type: "ir-sensor",
-                            pins: {
-                                1: {name: "kitchen window", pin: 9}
-                            }
-                        }, {
-                            id: -6,
-                            type: "single-relay",
-                            pins: {
-                                1: {name: "kitchen window", pin: 26}
-                            }
-                        }
-                    ]
+                used_pins: [{
+                    "id": 1,
+                    "pin": 3,
+                    "module_pin": 0,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 2,
+                    "pin": 5,
+                    "module_pin": 1,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 3,
+                    "pin": 7,
+                    "module_pin": 2,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 4,
+                    "pin": 8,
+                    "module_pin": 3,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 5,
+                    "pin": 11,
+                    "module_pin": 4,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 6,
+                    "pin": 12,
+                    "module_pin": 5,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 7,
+                    "pin": 13,
+                    "module_pin": 6,
+                    "client_id": 14,
+                    "sensor_id": 2
+                },{
+                    "id": 8,
+                    "pin": 15,
+                    "module_pin": 7,
+                    "client_id": 14,
+                    "sensor_id": 2
                 }
+                ],
             }}/>
         })
         : <div>CALL</div>}
